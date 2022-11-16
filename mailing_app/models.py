@@ -12,13 +12,15 @@ class Subscriber(models.Model):
                              db_index=True,
                              default='zhenyha.vo@gmail.com'
                              )
+    opened = models.BooleanField(default=False)
 
     def __str__(self):
-        return '%s %s %s %s\n' % (self.first_name,
-                                  self.last_name,
-                                  self.birth_date,
-                                  self.email,
-                                  )
+        return '%s %s %s %s %s\n' % (self.first_name,
+                                     self.last_name,
+                                     self.birth_date,
+                                     self.email,
+                                     self.opened,
+                                     )
 
 
 def db_filler(amount_subscribers=3):
