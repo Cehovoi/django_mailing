@@ -1,19 +1,22 @@
 from __future__ import absolute_import
 from datetime import datetime
-from time import sleep
+
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+
+from celery.schedules import crontab
+from celery.task import periodic_task
 from celery import shared_task
 
 from .models import Subscriber, LetterInfo
+from . import TEST_DOMAIN
 
 
-@shared_task()
-def run_mail(check_url=None):
+def _run_mail():
+    check_url = TEST_DOMAIN + '/opened/'
     subscribers = Subscriber.objects.all()
     for subscriber in subscribers:
-        sleep(2)
         letter_info = LetterInfo(sent=datetime.now(), subscriber=subscriber)
         letter_info.save()
         image_url = '%s%s' % (check_url, letter_info.id)
@@ -29,3 +32,16 @@ def run_mail(check_url=None):
         to = subscriber.email
         send_mail(subject, plain_message, from_email, [to],
                   html_message=html_message)
+
+
+@shared_task()
+def run_mail():
+    _run_mail()
+
+
+@periodic_task(run_every=(crontab(minute='*/2')),
+               name="Dispatch_scheduled_mail",
+               reject_on_worker_lost=True,
+               ignore_result=True)
+def run_schedule_mail():
+    _run_mail()
