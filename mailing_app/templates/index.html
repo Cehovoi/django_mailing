@@ -10,13 +10,14 @@
 </form>
 
 <form action="{% url 'check' %}">
-    <input type="submit" value="CHECK" />
+    <input type="submit" value="CHECK NOW!" />
 </form>
 
 {% if subscribers %}
     <ul>
     {% for sub in subscribers %}
-        <h5>{{sub}} </h5>
+        <h5>{{sub.0}}</h5>
+        <h5>{{sub.1}}</h5>
     {% endfor %}
     </ul>
 {% endif %}
