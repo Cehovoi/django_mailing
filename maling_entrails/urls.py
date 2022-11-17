@@ -18,7 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url('', include('mailing_app.urls')),
-    url(r'^send/', include('mailing_app.urls')),
-    url(r'^check/', include('mailing_app.urls')),
     url(r'^admin/', admin.site.urls),
 ]

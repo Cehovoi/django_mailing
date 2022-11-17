@@ -9,18 +9,18 @@
            value="Send Mail to {{amount_subscribers}} subscribers" />
 </form>
 
-<form action="{% url 'check' %}">
-    <input type="submit" value="CHECK NOW!" />
+<form action="{% url 'index' %}">
+    <input type="submit" value="Index page" />
 </form>
 
-{% if subscribers %}
+<ul>
+{% for sub in subscribers %}
+    <h5>{{sub.0}}</h5>
     <ul>
-    {% for sub in subscribers %}
-        <h5>{{sub.0}}</h5>
         <h5>{{sub.1}}</h5>
-    {% endfor %}
     </ul>
-{% endif %}
+{% endfor %}
+</ul>
 
 </body>
 </html>
